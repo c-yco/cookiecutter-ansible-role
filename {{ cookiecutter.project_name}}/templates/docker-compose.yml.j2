@@ -1,0 +1,33 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    restart: always
+    environment:
+      
+    DOMAIN: https://{{ subdomain }}.{{ base_domain }}
+    volumes:
+      - {{root_path }}/{{ data_folder }}:/config
+      - /etc/localtime:/etc/localtime:ro
+    
+    privileged: true
+
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homeassistant.rule=Host(`{{ subdomain }}.{{ base_domain }}`)"
+      - "traefik.http.routers.homeassistant.entrypoints=websecure"
+      - "traefik.http.routers.homeassistant.tls=true"
+      - "traefik.http.routers.homeassistant.tls.certresolver=letsencrypt"
+      - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
+    networks:
+      - traefik_default
+      - homeassistant
+
+ 
+
+networks:
+  homeassistant:
+  traefik_default:
+    external: true

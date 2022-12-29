@@ -1,0 +1,42 @@
+location:
+  source_directories:
+    - /mnt/source{{ root_path }}/{{data_folder }}
+  repositories:
+    - {{ borgbase_repo_url }}
+  exclude_patterns:
+    - "*.pyc"
+    - ~/*/.cache
+  exclude_if_present: .nobackup
+  one_file_system: true
+
+storage:
+  #   Passphrase is set in variable $BORG_PASSPHRASE
+  #   encryption_passphrase: "DoNotMissToChangeYourPassphrase"
+  compression: auto,zstd
+  archive_name_format: "{{ ansible_role_name }}-{now}"
+  # Needs recent Borgmatic version
+  retries: 5
+  retry_wait: 5
+
+retention:
+  keep_hourly: 2
+  keep_daily: 7
+  keep_weekly: 4
+  keep_monthly: 12
+  keep_yearly: 2
+  prefix: "{{ ansible_role_name }}-"
+
+consistency:
+  checks:
+    - repository
+    - archives
+  check_last: 3
+  prefix: "{{ ansible_role_name }}-"
+
+hooks:
+  before_backup:
+    - echo "Starting a backup job."
+  after_backup:
+    - echo "Backup created."
+  on_error:
+    - echo "Error while creating a backup."

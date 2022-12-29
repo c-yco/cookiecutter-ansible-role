@@ -1,0 +1,18 @@
+---
+# tasks file for unifi
+- name: create and run docker-compose application files for homeassistant
+  include_tasks:
+    file: "{{ playbook_dir }}/tasks/setup-compose.yml"
+  vars:
+    service_root: "{{ root_path }}"
+# - name: template home assistant configuration.yaml
+#   ansible.builtin.template:
+#     src: configuration.yaml.j2
+#     dest: "{{root_path}}/ha-config/configuration.yaml"
+
+- name: link borgmatic backup config to {{ borgmatic_config_folder }}
+  file:
+    src: "{{ root_path }}/{{ ansible_role_name }}_borgmatic.yml"
+    dest: "{{ borgmatic_config_folder }}/{{ ansible_role_name }}.yml"
+    state: hard
+    force: true

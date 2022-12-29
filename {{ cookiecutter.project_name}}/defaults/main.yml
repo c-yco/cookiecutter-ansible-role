@@ -1,0 +1,7 @@
+subdomain: "{{ cookiecutter.subdomain }}"
+{% raw %}
+root_path: "{{ compose_root }}/{{ ansible_role_name }}"
+
+data_folder: config
+always_restart: false
+{% endraw %}
