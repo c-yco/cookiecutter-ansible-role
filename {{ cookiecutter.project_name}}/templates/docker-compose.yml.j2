@@ -1,27 +1,27 @@
 version: '3'
 services:
-  {{cookiecutter.project_name}}:
-    container_name: {{cookiecutter.project_name}}
-    image: "ghcr.io/home-assistant/home-assistant:stable"
+  {{ansible_role_name}}:
+    #container_name: {{ansible_role_name}}
+    #image: "ghcr.io/home-assistant/home-assistant:stable"
     restart: always
     environment:
-    volumes:
-      - {{root_path }}/{{ data_folder }}:/config
-      - /etc/localtime:/etc/localtime:ro
+    # volumes:
+    #   - {{root_path }}/{{ data_folder }}:/config
+    #   - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.{{cookiecutter.project_name}}.rule=Host(`{{ subdomain }}.{{ base_domain }}`)"
-      - "traefik.http.routers.{{cookiecutter.project_name}}.entrypoints=websecure"
-      - "traefik.http.routers.{{cookiecutter.project_name}}.tls=true"
-      - "traefik.http.routers.{{cookiecutter.project_name}}.tls.certresolver=letsencrypt"
-      - "traefik.http.services.{{cookiecutter.project_name}}.loadbalancer.server.port=8123"
+      - "traefik.http.routers.{{ansible_role_name}}.rule=Host(`{{ subdomain }}.{{ base_domain }}`)"
+      - "traefik.http.routers.{{ansible_role_name}}.entrypoints=websecure"
+      - "traefik.http.routers.{{ansible_role_name}}.tls=true"
+      - "traefik.http.routers.{{ansible_role_name}}.tls.certresolver=letsencrypt"
+      - "traefik.http.services.{{ansible_role_name}}.loadbalancer.server.port=8123"
     networks:
       - traefik_default
-      - {{cookiecutter.project_name}}
+      - {{ansible_role_name}}
 
  
 
 networks:
-  {{cookiecutter.project_name}}:
+  {{ansible_role_name}}:
   traefik_default:
     external: true
