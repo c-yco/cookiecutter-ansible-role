@@ -1,13 +1,18 @@
 version: '3'
 services:
   {{ansible_role_name}}:
-    #container_name: {{ansible_role_name}}
+    container_name: {{ansible_role_name}}
     #image: "ghcr.io/home-assistant/home-assistant:stable"
     restart: always
     environment:
+      - TZ=Europe/London
     # volumes:
     #   - {{root_path }}/{{ data_folder }}:/config
     #   - /etc/localtime:/etc/localtime:ro
+    {%- if not cookiecutter.runs_on_traefik_host -%}
+    ports:
+      # Add Ports here
+    {%- endif -%}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.{{ansible_role_name}}.rule=Host(`{{ subdomain }}.{{ base_domain }}`)"
@@ -15,13 +20,15 @@ services:
       - "traefik.http.routers.{{ansible_role_name}}.tls=true"
       - "traefik.http.routers.{{ansible_role_name}}.tls.certresolver=letsencrypt"
       - "traefik.http.services.{{ansible_role_name}}.loadbalancer.server.port=8123"
+    {%- if cookiecutter.runs_on_traefik_host -%}
     networks:
       - traefik_default
       - {{ansible_role_name}}
-
- 
+    
 
 networks:
   {{ansible_role_name}}:
   traefik_default:
     external: true
+{%- endif -%}
+ 

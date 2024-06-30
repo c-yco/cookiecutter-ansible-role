@@ -1,6 +1,8 @@
 {
     "project_name": "",
     "subdomain": "{{ cookiecutter.project_name }}",
+    "runs_on_traefik_host": true,
+    
     "_copy_without_render": [
         "*.j2",
         "tasks/*",
