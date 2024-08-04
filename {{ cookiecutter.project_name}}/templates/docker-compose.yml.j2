@@ -20,6 +20,11 @@ services:
       - "traefik.http.routers.{{ansible_role_name}}.tls=true"
       - "traefik.http.routers.{{ansible_role_name}}.tls.certresolver=letsencrypt"
       - "traefik.http.services.{{ansible_role_name}}.loadbalancer.server.port=8123"
+      #- homepage.group=Downloads & Media
+      #- homepage.name=TVHeadend
+      #- homepage.icon=tvheadend
+      #- homepage.href=https://{{ subdomain }}.{{ base_domain }}
+      #- homepage.description=TV recorder
     {%- if cookiecutter.runs_on_traefik_host -%}
     networks:
       - traefik_default
